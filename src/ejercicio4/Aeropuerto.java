@@ -27,23 +27,34 @@ public class Aeropuerto {
 		return "Aeropuerto [lista=" + lista + "]";
 	}
 	
-	public void agregar(String nombreCompania, LocalDate fecha, LocalTime hora, double duracion, int numPasajeros) {
+	public boolean agregar(String nombreCompania, LocalDate fecha, LocalTime hora, double duracion, int numPasajeros) {
 		boolean noEncontrado=lista.stream()
-						.noneMatch(x -> x.getFechaSalida().atTime(x.getHoraSalida())!=fecha.atTime(hora));
+						.noneMatch(x -> fecha.atTime(hora).equals(x.getFechaSalida().atTime(x.getHoraSalida())));
 		
 		if(noEncontrado) {
-			lista.add(new Vuelos(nombreCompania, fecha, hora, duracion, numPasajeros));
+			Vuelos v1=new Vuelos(nombreCompania, fecha, hora, duracion, numPasajeros);
+			lista.add(v1);
+			v1.generarIdentificador();
+			return true;
+		}else {
+			return false;
 		}
 	}
 	
-	public void generarId(Vuelos v) {
-		v.generarIdentificador();
-	}
 	public LocalDateTime calcularHoraLlegada(Vuelos v) {
 		return v.getFechaSalida().atTime(v.getHoraSalida()).plusHours((long)v.getDuracion());
 	}
 	
+	public void mostrarTodosLosVuelos() {
+		lista.forEach(System.out::println);
+	}
 	
+	public Vuelos buscarPorId(String id) {
+		return lista.stream()
+				.filter(x -> x.getId().equalsIgnoreCase(id))
+				.findFirst()
+				.get();
+	}
 	
 	
 	

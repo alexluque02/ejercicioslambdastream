@@ -80,6 +80,6 @@ public class Vuelos {
 	public void generarIdentificador() {
 		Random num=new Random (System.nanoTime());
 		int numeroAleatorio=num.nextInt(9999-1000+1)+1000;
-		this.id=this.nombreCompania.substring(0, 2).concat(String.valueOf(numeroAleatorio));
+		this.id=this.nombreCompania.replaceAll("\\s+", "").substring(0, 3).toUpperCase().concat(String.valueOf(numeroAleatorio));
 	}
 }
