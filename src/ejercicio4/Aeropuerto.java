@@ -42,7 +42,7 @@ public class Aeropuerto {
 	}
 	
 	public LocalDateTime calcularHoraLlegada(Vuelos v) {
-		return v.getFechaSalida().atTime(v.getHoraSalida()).plusHours((long)v.getDuracion());
+		return v.getFechaSalida().atTime(v.getHoraSalida()).plusHours((long)v.getDuracion()); //Sumar minutos
 	}
 	
 	public void mostrarTodosLosVuelos() {

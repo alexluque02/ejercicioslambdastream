@@ -3,7 +3,9 @@ package ejercicio4;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import utilidades.Leer;
 
@@ -11,10 +13,12 @@ public class Principal {
 
 	public static void main(String[] args) {
 		List <Vuelos> listaVuelos = new ArrayList <Vuelos> ();
+		Map<Pasajero, Vuelos> billetes = new HashMap <Pasajero, Vuelos> ();
 		Aeropuerto a = new Aeropuerto(listaVuelos);
-		int menu, dia, mes, anio, horaSalida, minuto, maxPasajeros;
+		GestionBilletes gb = new GestionBilletes(billetes);
+		int menu=1, dia, mes, anio, horaSalida, minuto, numPasajeros;
 		double duracion;
-		String nombreCompania, id;
+		String nombreCompania, id, dni, nombre;
 		LocalDate fecha;
 		LocalTime hora;
 		a.agregar("Ryanair", LocalDate.of(2023, 3, 25), LocalTime.of(15, 30), 2.30, 120);
@@ -36,46 +40,72 @@ public class Principal {
 		a.agregar("France", LocalDate.of(2023, 3, 9), LocalTime.of(15, 30), 2.22, 120);
 		a.agregar("Ryanair", LocalDate.of(2023, 3, 8), LocalTime.of(15, 30), 2.30, 120);
 		
-		do {
-			System.out.println("1. Añadir un vuelo\n"
-					+ "2. Mostrar vuelos\n"
-					+ "3. Calcular hora de llegada para un vuelo\n");
-			menu=Leer.datoInt();
-			switch(menu) {
-			case 1:
-				System.out.println("Diga el nombre de la compañía");
-				nombreCompania=Leer.dato();
-				System.out.println("Diga la día de salida");
-				dia=Leer.datoInt();
-				System.out.println("Diga el mes");
-				mes=Leer.datoInt();
-				System.out.println("Diga el año");
-				anio=Leer.datoInt();
-				fecha=LocalDate.of(anio, mes, dia);
-				System.out.println("Diga la hora");
-				horaSalida=Leer.datoInt();
-				System.out.println("Diga el minuto");
-				minuto=Leer.datoInt();
-				hora=LocalTime.of(horaSalida, minuto);
-				System.out.println("Diga la duración del vuelo");
-				duracion=Leer.datoDouble();
-				System.out.println("Diga el máximo de pasajeros");
-				maxPasajeros=Leer.datoInt();
-				if(a.agregar(nombreCompania, fecha, hora, duracion, maxPasajeros)) {
-					System.out.println("Agregado con éxito");
-				}else {
-					System.out.println("Las fechas coinciden. Inténtelo de nuevo");
+		do { 
+			try {
+				System.out.println("1. Añadir un vuelo\n"
+						+ "2. Mostrar vuelos\n"
+						+ "3. Calcular hora de llegada para un vuelo\n"
+						+ "4. Vender un billete\n"
+						+ "5. Mostrar Billetes");
+				menu=Leer.datoInt();
+				switch(menu) {
+				case 1:
+					System.out.println("Diga el nombre de la compañía");
+					nombreCompania=Leer.dato();
+					System.out.println("Diga la día de salida");
+					dia=Leer.datoInt();
+					System.out.println("Diga el mes");
+					mes=Leer.datoInt();
+					System.out.println("Diga el año");
+					anio=Leer.datoInt();
+					fecha=LocalDate.of(anio, mes, dia);
+					System.out.println("Diga la hora");
+					horaSalida=Leer.datoInt();
+					System.out.println("Diga el minuto");
+					minuto=Leer.datoInt();
+					hora=LocalTime.of(horaSalida, minuto);
+					System.out.println("Diga la duración del vuelo");
+					duracion=Leer.datoDouble();
+					System.out.println("Diga el número de pasajeros");
+					numPasajeros=Leer.datoInt();
+					if(a.agregar(nombreCompania, fecha, hora, duracion, numPasajeros)) {
+						System.out.println("Agregado con éxito");
+					}else {
+						System.out.println("Las fechas coinciden. Inténtelo de nuevo");
+					}
+					break;
+				case 2:
+					a.mostrarTodosLosVuelos();
+					break;
+				case 3:
+					a.mostrarTodosLosVuelos();
+					System.out.println("Diga el id del vuelo");
+					id=Leer.dato();
+					System.out.println("La hora e llegada del vuelo es: "+a.calcularHoraLlegada(a.buscarPorId(id)));
+					break;
+				case 4:
+					System.out.println("Diga el dni del pasajero");
+					dni=Leer.dato();
+					System.out.println("Diga el nombre del pasajero");
+					nombre=Leer.dato();
+					System.out.println("Qué día nació");
+					dia=Leer.datoInt();
+					System.out.println("Qué mes");
+					mes=Leer.datoInt();
+					System.out.println("Qué año");
+					anio=Leer.datoInt();
+					fecha=LocalDate.of(anio, mes, dia);
+					System.out.println("Diga el id del vuelo que quiere comprar");
+					id=Leer.dato();
+					gb.agregarBillete(new Pasajero(dni, nombre, fecha), a.buscarPorId(id));
+					break;
+				case 5:
+					gb.mostrarBilletesVendidos();
+					break;
+					
 				}
-				break;
-			case 2:
-				a.mostrarTodosLosVuelos();
-				break;
-			case 3:
-				a.mostrarTodosLosVuelos();
-				System.out.println("Diga el id del vuelo");
-				id=Leer.dato();
-				System.out.println("La hora e llegada del vuelo es: "+a.calcularHoraLlegada(a.buscarPorId(id)));
-				break;
+			}catch(Exception e) {
+				System.out.println("Error");
 			}
 		}while(menu!=0);
 	}
