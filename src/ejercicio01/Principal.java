@@ -61,6 +61,9 @@ public class Principal {
 			case 10:
 				s.mostrarListaPasada(s.devolverAlumnosLetrayLargo());
 				break;
+			case 0:
+				System.out.println("Saliendo");
+				break;
 			}
 		}while(menu!=0);
 		
